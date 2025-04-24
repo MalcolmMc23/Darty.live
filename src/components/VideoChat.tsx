@@ -20,14 +20,20 @@ export default function VideoChat({ room, onLeave }: VideoChatProps) {
   useEffect(() => {
     if (!room) return;
 
+    console.log("Setting up VideoChat with room:", room.name);
+
     // Track subscription handler
     const onTrackSubscribed = (
       track: Track,
       publication: any,
       participant: Participant
     ) => {
+      console.log(
+        `Track subscribed: ${track.kind} from ${participant.identity}`
+      );
       if (track.kind === Track.Kind.Video) {
         track.attach(remoteVideoRef.current!);
+        setHasRemoteParticipant(true);
       } else if (track.kind === Track.Kind.Audio) {
         track.attach();
       }
@@ -35,12 +41,14 @@ export default function VideoChat({ room, onLeave }: VideoChatProps) {
 
     // Track unsubscription handler
     const onTrackUnsubscribed = (track: Track) => {
+      console.log(`Track unsubscribed: ${track.kind}`);
       track.detach();
     };
 
     // Setup local tracks
     const setupLocalTracks = async () => {
       try {
+        console.log("Setting up local tracks");
         // This will handle camera and microphone permissions and publishing
         await room.localParticipant.enableCameraAndMicrophone();
 
@@ -54,16 +62,24 @@ export default function VideoChat({ room, onLeave }: VideoChatProps) {
             localVideoRef.current
           ) {
             track.attach(localVideoRef.current);
+            console.log("Local video track attached");
           }
         }
       } catch (error) {
         console.error("Error setting up local tracks:", error);
+        // You might want to show an error message to the user here
       }
     };
 
     // Set up event listeners
     room.on("trackSubscribed", onTrackSubscribed);
     room.on("trackUnsubscribed", onTrackUnsubscribed);
+
+    // Handle connection state changes
+    const handleConnectionStateChanged = (state: string) => {
+      console.log(`Room connection state changed: ${state}`);
+    };
+    room.on("connectionStateChanged", handleConnectionStateChanged);
 
     // Setup local tracks
     setupLocalTracks();
@@ -87,6 +103,7 @@ export default function VideoChat({ room, onLeave }: VideoChatProps) {
       // Clean up
       room.off("trackSubscribed", onTrackSubscribed);
       room.off("trackUnsubscribed", onTrackUnsubscribed);
+      room.off("connectionStateChanged", handleConnectionStateChanged);
 
       // Detach all tracks
       const localVideoElement = localVideoRef.current;

@@ -3,6 +3,9 @@ import { Room, LocalParticipant } from "livekit-client";
 // API endpoint URL - change to your deployed server URL in production
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
+// Log the API URL being used to help with debugging
+console.log(`Using API URL: ${API_BASE_URL}`);
+
 /**
  * Connect to a LiveKit room
  * @param url LiveKit server URL

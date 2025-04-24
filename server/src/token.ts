@@ -36,5 +36,16 @@ export function generateToken(roomName: string, identity: string): string {
  * @returns The WebSocket URL of the LiveKit server
  */
 export function getLiveKitUrl(): string {
-  return process.env.LIVEKIT_URL || 'ws://localhost:7880';
+  const url = process.env.LIVEKIT_URL || 'ws://localhost:7880';
+  
+  // If we're in production (Railway) and the URL doesn't start with wss://
+  // and is not localhost, convert it to wss://
+  if (process.env.NODE_ENV === 'production' && 
+      !url.startsWith('wss://') && 
+      !url.includes('localhost')) {
+    // Replace ws:// with wss:// or add wss:// if protocol missing
+    return url.startsWith('ws://') ? url.replace('ws://', 'wss://') : `wss://${url}`;
+  }
+  
+  return url;
 } 
