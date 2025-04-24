@@ -1,14 +1,9 @@
 [build]
 builder = "nixpacks"
-buildCommand = "DISABLE_ESLINT_PLUGIN=true pnpm install && pnpm build:railway"
-watchPatterns = ["src/**", "package.json"]
+buildCommand = "pnpm install && pnpm build:railway"
 
 [deploy]
 startCommand = "pnpm start"
-healthcheckPath = "/"
-healthcheckTimeout = 100
-restartPolicyType = "on-failure"
-restartPolicyMaxRetries = 10
 
 [env]
 PORT = "3000"
@@ -16,6 +11,7 @@ DISABLE_ESLINT_PLUGIN = "true"
 NODE_OPTIONS = "--max-old-space-size=4096"
 NEXT_IGNORE_TYPE_CHECK = "true"
 
+# Frontend service
 [[services]]
 name = "frontend"
 envVarGroup = "frontend"
@@ -23,10 +19,22 @@ healthcheckPath = "/"
 buildCommand = "DISABLE_ESLINT_PLUGIN=true pnpm install && pnpm build:railway"
 startCommand = "pnpm start"
 
+# Environment variables for frontend
+[services.frontend.env]
+NEXT_PUBLIC_API_URL = "${{RAILWAY_SERVICE_SERVER_URL}}"
+
+# Backend service
 [[services]]
 name = "server"
 rootDirectory = "server"
 envVarGroup = "server"
 healthcheckPath = "/"
 buildCommand = "pnpm install && pnpm build"
-startCommand = "pnpm start" 
+startCommand = "pnpm start"
+
+# Environment variables for server
+[services.server.env]
+LIVEKIT_URL = "${{LIVEKIT_URL}}"
+LIVEKIT_API_KEY = "${{LIVEKIT_API_KEY}}"
+LIVEKIT_API_SECRET = "${{LIVEKIT_API_SECRET}}"
+PORT = "3000" 
