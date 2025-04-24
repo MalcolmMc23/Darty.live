@@ -1,0 +1,32 @@
+port: 7880
+rtc:
+  tcp_port: 7882
+  udp_port: 7882
+  # UDP port range for WebRTC connections
+  port_range_start: 50000 
+  port_range_end: 60000
+
+keys:
+  # These keys are used to generate access tokens for clients to connect
+  # Replace these with your own keys in production
+  darty-api-key: darty-api-secret
+
+redis:
+  # Redis is optional but recommended for production
+  # address: localhost:6379
+  # username: 
+  # password:
+  # db: 0
+
+# Logging configuration
+logging:
+  level: info
+
+# TURN server configuration (optional)
+turn:
+  enabled: true
+  # domain: # Your server's domain name if you have one
+  # tls_port: 5349 # TURN over TLS port
+  udp_port: 3478 # TURN over UDP port
+  # cert_file: # Path to SSL certificate if you have one
+  # key_file: # Path to SSL key if you have one 
