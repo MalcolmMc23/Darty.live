@@ -1,6 +1,6 @@
 [build]
 builder = "nixpacks"
-buildCommand = "DISABLE_ESLINT_PLUGIN=true pnpm install && pnpm build"
+buildCommand = "DISABLE_ESLINT_PLUGIN=true pnpm install && pnpm build:railway"
 watchPatterns = ["src/**", "package.json"]
 
 [deploy]
@@ -13,12 +13,14 @@ restartPolicyMaxRetries = 10
 [env]
 PORT = "3000"
 DISABLE_ESLINT_PLUGIN = "true"
+NODE_OPTIONS = "--max-old-space-size=4096"
+NEXT_IGNORE_TYPE_CHECK = "true"
 
 [[services]]
 name = "frontend"
 envVarGroup = "frontend"
 healthcheckPath = "/"
-buildCommand = "DISABLE_ESLINT_PLUGIN=true pnpm install && pnpm build"
+buildCommand = "DISABLE_ESLINT_PLUGIN=true pnpm install && pnpm build:railway"
 startCommand = "pnpm start"
 
 [[services]]

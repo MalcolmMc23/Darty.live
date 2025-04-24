@@ -1,15 +1,20 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef, useEffect, useState } from "react";
+import VideoControls from "./VideoControls";
 import { Room, Track, Participant } from "livekit-client";
 
-interface VideoChatProps {
+export interface VideoChatProps {
   room: Room | null;
+  onLeave: () => void;
 }
 
-export default function VideoChat({ room }: VideoChatProps) {
+export default function VideoChat({ room, onLeave }: VideoChatProps) {
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
+  // const [publication, setPublication] = useState<any>(null);
+  // const [participant, setParticipant] = useState(null);
+  const [hasRemoteParticipant, setHasRemoteParticipant] = useState(false);
 
   // Set up event listeners for tracks
   useEffect(() => {
@@ -84,11 +89,13 @@ export default function VideoChat({ room }: VideoChatProps) {
       room.off("trackUnsubscribed", onTrackUnsubscribed);
 
       // Detach all tracks
-      if (localVideoRef.current) {
-        localVideoRef.current.srcObject = null;
+      const localVideoElement = localVideoRef.current;
+      const remoteVideoElement = remoteVideoRef.current;
+      if (localVideoElement) {
+        localVideoElement.srcObject = null;
       }
-      if (remoteVideoRef.current) {
-        remoteVideoRef.current.srcObject = null;
+      if (remoteVideoElement) {
+        remoteVideoElement.srcObject = null;
       }
     };
   }, [room]);

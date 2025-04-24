@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { Room, LocalParticipant } from "livekit-client";
+import React from "react";
+import { Room } from "livekit-client";
 
 interface VideoControlsProps {
   room: Room | null;
@@ -9,8 +9,8 @@ interface VideoControlsProps {
 }
 
 export default function VideoControls({ room, onLeave }: VideoControlsProps) {
-  const [isMicrophoneMuted, setIsMicrophoneMuted] = useState(false);
-  const [isCameraOff, setIsCameraOff] = useState(false);
+  const [isMicrophoneMuted, setIsMicrophoneMuted] = React.useState(false);
+  const [isCameraOff, setIsCameraOff] = React.useState(false);
 
   const localParticipant = room?.localParticipant;
 

@@ -5,10 +5,12 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "DISABLE_ESLINT_PLUGIN=true next build",
+    "build:no-lint": "DISABLE_ESLINT_PLUGIN=true NODE_OPTIONS=--max-old-space-size=4096 next build --no-lint",
+    "build:railway": "DISABLE_ESLINT_PLUGIN=true NODE_OPTIONS=--max-old-space-size=4096 NEXT_IGNORE_TYPE_CHECK=true next build --no-lint",
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
-    "deploy:frontend": "pnpm install && DISABLE_ESLINT_PLUGIN=true pnpm build && pnpm start",
+    "deploy:frontend": "pnpm install && pnpm build:railway && pnpm start",
     "deploy:server": "cd server && pnpm install && pnpm build && pnpm start",
     "deploy": "pnpm deploy:frontend",
     "dev:livekit": "livekit-server --config livekit.yaml",

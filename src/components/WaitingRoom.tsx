@@ -36,7 +36,8 @@ export default function WaitingRoom({ onCancel }: WaitingRoomProps) {
 
       <h2 className="text-2xl font-bold mb-4">Finding a peer...</h2>
       <p className="text-gray-400 mb-8 text-center">
-        We're looking for someone to chat with you. This might take a moment.
+        We&apos;re looking for someone to chat with you. This might take a
+        moment.
       </p>
 
       <button

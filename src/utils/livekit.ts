@@ -1,4 +1,4 @@
-import { Room, RoomEvent, LocalParticipant, RemoteParticipant, Track } from 'livekit-client';
+import { Room, LocalParticipant } from "livekit-client";
 
 // API endpoint URL - change to your deployed server URL in production
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';

@@ -1,8 +1,9 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Room } from "livekit-client";
-import { useRouter } from "next/navigation";
+import { joinRoom } from "@/utils/livekit";
 import VideoChat from "@/components/VideoChat";
 import VideoControls from "@/components/VideoControls";
 import WaitingRoom from "@/components/WaitingRoom";
@@ -16,12 +17,11 @@ import {
 
 export default function ChatPage() {
   const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
   const [room, setRoom] = useState<Room | null>(null);
   const [status, setStatus] = useState<"connecting" | "waiting" | "chatting">(
     "connecting"
   );
-  const [error, setError] = useState<string | null>(null);
-  const [hasPartner, setHasPartner] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
   const [roomName, setRoomName] = useState<string | null>(null);
 
@@ -63,7 +63,6 @@ export default function ChatPage() {
 
         // If we already have a match, go to chatting state
         if (matched) {
-          setHasPartner(true);
           setStatus("chatting");
           // Publish local tracks immediately
           await publishTracks(newRoom.localParticipant);
@@ -74,7 +73,6 @@ export default function ChatPage() {
           // Set up event handlers for when someone joins
           newRoom.once("participantConnected", async () => {
             if (mounted) {
-              setHasPartner(true);
               setStatus("chatting");
 
               // Publish local tracks after partner joins
@@ -86,9 +84,6 @@ export default function ChatPage() {
         // Handle when partner disconnects
         newRoom.on("participantDisconnected", () => {
           if (mounted) {
-            setHasPartner(false);
-            // You can choose to either go back to waiting, or navigate away
-            // For this example, we'll show a message and let the user decide
             setError("Your chat partner has disconnected.");
           }
         });
@@ -109,7 +104,7 @@ export default function ChatPage() {
         leaveRoom(room, roomName);
       }
     };
-  }, []);
+  }, [room, roomName]);
 
   const handleFindNew = async () => {
     // Disconnect from current room
@@ -119,7 +114,6 @@ export default function ChatPage() {
       setRoomName(null);
     }
 
-    setHasPartner(false);
     setStatus("connecting");
 
     // This will trigger the useEffect to run again and find a new match
