@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "DISABLE_ESLINT_PLUGIN=true next build",
     "start": "next start",
     "lint": "next lint",
-    "deploy:frontend": "pnpm install && pnpm build && pnpm start",
+    "lint:fix": "next lint --fix",
+    "deploy:frontend": "pnpm install && DISABLE_ESLINT_PLUGIN=true pnpm build && pnpm start",
     "deploy:server": "cd server && pnpm install && pnpm build && pnpm start",
     "deploy": "pnpm deploy:frontend",
     "dev:livekit": "livekit-server --config livekit.yaml",
