@@ -18,9 +18,30 @@ The application consists of three main components:
 
 ## Local Development Setup
 
-### 1. LiveKit Server
+### Option 1: Start All Services Together
 
-First, install the LiveKit server:
+The easiest way to start all services at once:
+
+```bash
+# Install dependencies first
+pnpm install
+cd server && pnpm install && cd ..
+
+# Start everything with one command
+pnpm dev:all
+```
+
+This will concurrently run:
+
+- LiveKit server with your configuration
+- The Express matching server in development mode
+- The Next.js frontend in development mode
+
+### Option 2: Start Services Individually
+
+If you prefer to run services in separate terminals:
+
+1. LiveKit Server
 
 ```bash
 # For macOS
@@ -36,7 +57,7 @@ Start the LiveKit server with your configuration:
 livekit-server --config livekit.yaml
 ```
 
-### 2. Matching Server
+2. Matching Server
 
 Navigate to the server directory and install dependencies:
 
@@ -51,7 +72,7 @@ Start the server in development mode:
 pnpm dev
 ```
 
-### 3. Frontend
+3. Frontend
 
 Install dependencies:
 
@@ -147,3 +168,26 @@ darty.live/
 ## License
 
 MIT
+
+## Deployment with Railway
+
+### Option 1: Deploy Using Railway Dashboard
+
+1. Create a new project in Railway
+2. Link your GitHub repository (MalcolmMc23/Darty.live)
+3. Railway will detect the `railway.toml` configuration
+4. It will create two services:
+   - Frontend (Next.js app)
+   - Server (Express backend)
+5. Add the necessary environment variables:
+   - For frontend: Set `NEXT_PUBLIC_API_URL` to your Railway server URL
+   - For server: Add any required API keys
+
+### Option 2: Deploy Using Railway CLI
+
+1. Install Railway CLI: `npm install -g @railway/cli`
+2. Login: `railway login`
+3. Link project: `railway link`
+4. Deploy project: `railway up`
+
+The configuration in `railway.toml` will ensure both services are deployed correctly.

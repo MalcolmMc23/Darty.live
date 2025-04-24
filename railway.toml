@@ -1,0 +1,29 @@
+[build]
+builder = "nixpacks"
+buildCommand = "pnpm install && pnpm build"
+watchPatterns = ["src/**", "package.json"]
+
+[deploy]
+startCommand = "pnpm start"
+healthcheckPath = "/"
+healthcheckTimeout = 100
+restartPolicyType = "on-failure"
+restartPolicyMaxRetries = 10
+
+[env]
+PORT = "3000"
+
+[[services]]
+name = "frontend"
+envVarGroup = "frontend"
+healthcheckPath = "/"
+buildCommand = "pnpm install && pnpm build"
+startCommand = "pnpm start"
+
+[[services]]
+name = "server"
+rootDirectory = "server"
+envVarGroup = "server"
+healthcheckPath = "/"
+buildCommand = "pnpm install && pnpm build"
+startCommand = "pnpm start" 

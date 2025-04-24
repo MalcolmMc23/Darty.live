@@ -6,7 +6,13 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy:frontend": "pnpm install && pnpm build && pnpm start",
+    "deploy:server": "cd server && pnpm install && pnpm build && pnpm start",
+    "deploy": "pnpm deploy:frontend",
+    "dev:livekit": "livekit-server --config livekit.yaml",
+    "dev:server": "cd server && pnpm dev",
+    "dev:all": "concurrently \"pnpm dev:livekit\" \"pnpm dev:server\" \"pnpm dev\""
   },
   "dependencies": {
     "livekit-client": "^2.11.3",
@@ -21,6 +27,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "concurrently": "^9.1.2",
     "eslint": "^9",
     "eslint-config-next": "15.3.1",
     "tailwindcss": "^4",
